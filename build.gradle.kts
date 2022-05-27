@@ -31,6 +31,7 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test"){
 		exclude("junit")
 	}
+	// junit5
 	testImplementation("org.junit.jupiter:junit-jupiter-api")
 	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }
