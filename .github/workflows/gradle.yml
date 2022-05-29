@@ -46,3 +46,17 @@ jobs:
     
     - name: UnitTest
       run: ./gradlew test
+  
+  deploy-staging:
+    name: GAE deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Deploy an Google Cloud Engine App
+        id: deploy-app
+        uses: google-github-actions/deploy-appengine@v0.3.1
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          deliverables: app.yaml
+          credentials: ${{ secrets.GCP_SA_KEY }}
+          version: v1
