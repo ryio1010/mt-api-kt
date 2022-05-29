@@ -1,0 +1,4 @@
+runtime: java17
+instance_class: F1
+env_variables:
+  JAVA_TOOL_OPTIONS: "-XX:MaxRAM=256m -XX:ActiveProcessorCount=2 -Xmx32m"
