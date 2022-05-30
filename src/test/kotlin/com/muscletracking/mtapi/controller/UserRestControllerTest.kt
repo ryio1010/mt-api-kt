@@ -23,7 +23,7 @@ internal class UserRestControllerTest {
     @DisplayName("demo関数は文字列のHello World！を返す")
     fun demo() {
         // 期待値
-        val expected = "Hello World!"
+        val expected = "Hello Github Actions !!"
         // 実績値
         val actual: String = controller.demo()
         // 比較
