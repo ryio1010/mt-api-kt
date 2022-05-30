@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.RestController
 class UserRestController {
     @GetMapping("/demo")
     fun demo():String {
-        return "Hello World!"
+        return "Hello Github Actions !!"
     }
 }
