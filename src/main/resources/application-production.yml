@@ -1,0 +1,12 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${individual-development:asia-northeast1:mt-postgresql}
+    username: mtadmin
+    password: mtadmin
+
+doma:
+  dialect: POSTGRES
