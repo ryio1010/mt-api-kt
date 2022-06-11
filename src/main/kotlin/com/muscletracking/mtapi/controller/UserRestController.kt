@@ -1,5 +1,6 @@
 package com.muscletracking.mtapi.controller
 
+import com.muscletracking.mtapi.entity.UserResponse
 import com.muscletracking.mtapi.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
@@ -17,8 +18,8 @@ class UserRestController {
     }
 
     @GetMapping("/test")
-    fun testDoma(): String {
+    fun testDoma(): UserResponse {
         val user = userService.getUserById("ryio1010")
-        return user.toString()
+        return UserResponse(user.id, user.userName, user.password)
     }
 }

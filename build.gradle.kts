@@ -49,6 +49,7 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test"){
 		exclude("junit")
 	}
+
 	// junit5
 	testImplementation("org.junit.jupiter:junit-jupiter-api")
 	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
@@ -61,14 +62,10 @@ dependencies {
 }
 // GCP GAEデプロイ用設定
 appengine {
-	// デプロイ時の設定
-	// GCLOUD_CONFIG を指定しておくと
-	// gcloud config で設定しているプロジェクト情報がセットされる
 	deploy {
 		// デプロイ先の Google Cloud Project ID
 		projectId = "individual-development"
 		// デプロイによって反映される Web アプリのバージョン
-		// 指定しなければ新しく生成される
 		version = "GCLOUD_CONFIG"
 	}
 }
