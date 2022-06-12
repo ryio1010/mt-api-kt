@@ -20,6 +20,7 @@ class UserRestController {
     @GetMapping("/test")
     fun testDoma(): UserResponse {
         val user = userService.getUserById("ryio1010")
+        println(user)
         return UserResponse(user.id, user.userName, user.password)
     }
 }
