@@ -1,4 +1,4 @@
-package com.muscletracking.mtapi.entity
+package com.muscletracking.mtapi.entity.user
 
 data class UserResponse(
     val id: String,

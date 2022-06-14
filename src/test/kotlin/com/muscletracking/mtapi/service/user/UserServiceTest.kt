@@ -1,7 +1,9 @@
 package com.muscletracking.mtapi.service
 
 import com.muscletracking.mtapi.dao.user.UserDao
-import com.muscletracking.mtapi.entity.User
+import com.muscletracking.mtapi.entity.user.User
+import com.muscletracking.mtapi.repository.user.UserRepository
+import com.muscletracking.mtapi.service.user.UserService
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import org.junit.jupiter.api.AfterEach
@@ -11,7 +13,6 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.mockito.InjectMocks
 import org.mockito.Mock
-import org.mockito.Mockito.mock
 import org.springframework.boot.test.context.SpringBootTest
 import com.nhaarman.mockitokotlin2.mock
 
@@ -22,7 +23,7 @@ internal class UserServiceTest {
     lateinit var userService: UserService
 
     @Mock
-    lateinit var userDao: UserDao
+    lateinit var userRepository: UserRepository
 
     @BeforeEach
     fun setUp() {
@@ -35,12 +36,14 @@ internal class UserServiceTest {
     @Test
     @DisplayName("DBからユーザー検索で正しい値が帰ってくる")
     fun getUserByIdTest() {
-        // mock
+        // expected
         val expected = User(id = "ryio1010", userName = "ryo", password = "ryio1010")
-        val mock = mock<UserDao> {
-            on { selectById(any()) } doReturn expected
-        }
 
+//        val mock = mock<UserDao> {
+//            on { selectById(any()) } doReturn expected
+//        }
+
+        // actual
         val inputUserId: String = "ryio1010"
         val actual = userService.getUserById(inputUserId)
 

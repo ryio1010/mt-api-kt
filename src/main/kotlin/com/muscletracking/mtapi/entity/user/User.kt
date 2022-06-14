@@ -1,4 +1,4 @@
-package com.muscletracking.mtapi.entity
+package com.muscletracking.mtapi.entity.user
 
 import org.seasar.doma.*
 import java.sql.Timestamp
