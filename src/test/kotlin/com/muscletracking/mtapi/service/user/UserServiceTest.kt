@@ -4,8 +4,12 @@ import com.muscletracking.mtapi.dao.user.UserDao
 import com.muscletracking.mtapi.entity.user.User
 import com.muscletracking.mtapi.repository.user.UserRepository
 import com.muscletracking.mtapi.service.user.UserService
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.doReturn
+import io.mockk.MockKAnnotations
+import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
+import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
+import io.mockk.verify
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -13,20 +17,21 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.mockito.InjectMocks
 import org.mockito.Mock
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import com.nhaarman.mockitokotlin2.mock
 
 @SpringBootTest
 internal class UserServiceTest {
 
-    @InjectMocks
-    lateinit var userService: UserService
+    @InjectMockKs
+    private var userService: UserService = UserService()
 
-    @Mock
-    lateinit var userRepository: UserRepository
+    @MockK
+    private var userRepository: UserRepository = UserRepository()
 
     @BeforeEach
     fun setUp() {
+        MockKAnnotations.init(this, relaxUnitFun = true)
     }
 
     @AfterEach
@@ -39,13 +44,11 @@ internal class UserServiceTest {
         // expected
         val expected = User(id = "ryio1010", userName = "ryo", password = "ryio1010")
 
-//        val mock = mock<UserDao> {
-//            on { selectById(any()) } doReturn expected
-//        }
+        val inputUserId: String = "001"
+        every { userRepository.getUserById(inputUserId) } returns expected
 
         // actual
-        val inputUserId: String = "ryio1010"
-        val actual = userService.getUserById(inputUserId)
+        val actual: User = userService.getUserById(inputUserId)
 
         assertEquals(expected.id, actual.id)
         assertEquals(expected.userName, actual.userName)
