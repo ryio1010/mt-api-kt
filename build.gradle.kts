@@ -53,7 +53,12 @@ dependencies {
 	// junit5
 	testImplementation("org.junit.jupiter:junit-jupiter-api")
 	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+
+	// mockk
 	testImplementation("io.mockk:mockk:1.12.4")
+
+	//kluent
+	testImplementation ("org.amshove.kluent:kluent:1.68")
 
 	// doma2
 	runtimeOnly("com.h2database:h2:1.4.191")
