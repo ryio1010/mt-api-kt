@@ -4,12 +4,10 @@ import com.muscletracking.mtapi.dao.user.UserDao
 import com.muscletracking.mtapi.entity.user.User
 import com.muscletracking.mtapi.repository.user.UserRepository
 import com.muscletracking.mtapi.service.user.UserService
-import io.mockk.MockKAnnotations
-import io.mockk.every
+import io.mockk.*
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
-import io.mockk.mockk
-import io.mockk.verify
+import org.amshove.kluent.`should be equal to`
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -50,8 +48,12 @@ internal class UserServiceTest {
         // actual
         val actual: User = userService.getUserById(inputUserId)
 
-        assertEquals(expected.id, actual.id)
-        assertEquals(expected.userName, actual.userName)
-        assertEquals(expected.password, actual.password)
+        verify(exactly = 1) { userRepository.getUserById(any()) }
+
+        expected.id `should be equal to` actual.id
+        expected.userName `should be equal to` actual.userName
+        expected.password `should be equal to` actual.password
+
+        confirmVerified(userRepository)
     }
 }

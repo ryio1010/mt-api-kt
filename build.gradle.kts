@@ -7,6 +7,7 @@ buildscript {
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:2.2.0.RELEASE")
 		classpath("com.google.cloud.tools:appengine-gradle-plugin:2.2.0'")
+		classpath("com.maeharin:factlin:0.1.1")
 	}
 }
 
@@ -19,6 +20,9 @@ plugins {
 	id("org.seasar.doma.compile") version "1.1.0"
 	id("com.google.cloud.tools.appengine") version "2.2.0"
 }
+
+apply(plugin = "factlin")
+
 
 group = "com.muscletracking"
 version = "0.0.1-SNAPSHOT"
@@ -53,7 +57,15 @@ dependencies {
 	// junit5
 	testImplementation("org.junit.jupiter:junit-jupiter-api")
 	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+
+	// mockk
 	testImplementation("io.mockk:mockk:1.12.4")
+
+	// kluent
+	testImplementation ("org.amshove.kluent:kluent:1.68")
+
+	// dbsetup-kotlin
+	testImplementation("com.ninja-squad:DbSetup-kotlin:2.1.0")
 
 	// doma2
 	runtimeOnly("com.h2database:h2:1.4.191")
