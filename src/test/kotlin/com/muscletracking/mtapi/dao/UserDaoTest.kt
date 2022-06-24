@@ -70,6 +70,5 @@ internal class UserDaoTest {
         actual.password `should be equal to` "test1"
         actual.regId `should be equal to` "test1"
         actual.regId `should be equal to` "test1"
-
     }
 }
