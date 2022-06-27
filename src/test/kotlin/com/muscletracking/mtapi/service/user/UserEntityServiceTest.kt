@@ -1,7 +1,6 @@
 package com.muscletracking.mtapi.service
 
-import com.muscletracking.mtapi.dao.user.UserDao
-import com.muscletracking.mtapi.entity.user.User
+import com.muscletracking.mtapi.entity.user.UserEntity
 import com.muscletracking.mtapi.repository.user.UserRepository
 import com.muscletracking.mtapi.service.user.UserService
 import io.mockk.*
@@ -9,17 +8,13 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import org.amshove.kluent.`should be equal to`
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import org.mockito.InjectMocks
-import org.mockito.Mock
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-internal class UserServiceTest {
+internal class UserEntityServiceTest {
 
     @InjectMockKs
     private var userService: UserService = UserService()
@@ -40,13 +35,13 @@ internal class UserServiceTest {
     @DisplayName("DBからユーザー検索で正しい値が帰ってくる")
     fun getUserByIdTest() {
         // expected
-        val expected = User(id = "ryio1010", userName = "ryo", password = "ryio1010")
+        val expected = UserEntity(id = "ryio1010", userName = "ryo", password = "ryio1010")
 
         val inputUserId: String = "001"
         every { userRepository.getUserById(inputUserId) } returns expected
 
         // actual
-        val actual: User = userService.getUserById(inputUserId)
+        val actual: UserEntity = userService.getUserById(inputUserId)
 
         verify(exactly = 1) { userRepository.getUserById(any()) }
 

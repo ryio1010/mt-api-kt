@@ -4,7 +4,7 @@ server:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: ${DATASOURCE:jdbc:postgresql://localhost:5433/muscletracking}
+    url: ${DATASOURCE:jdbc:postgresql://localhost:5433/muscletracking?currentSchema=muscle_tracking}
     username: mtadmin
     password: mtadmin
 
