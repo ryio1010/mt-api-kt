@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 
 @SpringBootTest
 @AutoConfigureMockMvc
-internal class UserRestControllerTest {
+internal class UserEntityRestControllerTest {
     @Autowired
     lateinit var controller: UserRestController
 
