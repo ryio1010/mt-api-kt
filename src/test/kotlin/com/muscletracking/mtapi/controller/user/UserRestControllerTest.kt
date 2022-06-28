@@ -13,11 +13,12 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 
 @SpringBootTest
 @AutoConfigureMockMvc
-internal class UserEntityRestControllerTest {
+internal class UserRestControllerTest {
     @Autowired
     lateinit var controller: UserRestController
 
@@ -54,5 +55,15 @@ internal class UserEntityRestControllerTest {
             .andExpect(jsonPath("$.id").value("ryio1010"))
             .andExpect(jsonPath("$.name").value("ryo"))
             .andExpect(jsonPath("$.password").value("ryio1010"))
+    }
+
+    @Test
+    @DisplayName("addNewUser関数はDBに新規ユーザーを1件登録できる")
+    fun addNewUserTest() {
+        mockMvc.perform(post("/user/add").contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.userId").value("test1"))
+            .andExpect(jsonPath("$.userName").value("テストユーザー１"))
+            .andExpect(jsonPath("$.password").value("test1pass"))
     }
 }

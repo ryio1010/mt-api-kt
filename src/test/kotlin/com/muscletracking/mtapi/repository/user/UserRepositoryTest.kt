@@ -11,9 +11,8 @@ import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
-import org.seasar.doma.jdbc.Result
 
-internal class UserEntityRepositoryTest {
+internal class UserRepositoryTest {
 
     @InjectMockKs
     private var userRepository: UserRepository = UserRepository()
@@ -61,5 +60,7 @@ internal class UserEntityRepositoryTest {
         expected.id `should be equal to` actual.id
         expected.userName `should be equal to` actual.userName
         expected.password `should be equal to` actual.password
+
+        confirmVerified(userDao)
     }
 }

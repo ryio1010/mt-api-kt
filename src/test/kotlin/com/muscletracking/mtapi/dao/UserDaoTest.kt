@@ -6,11 +6,7 @@ import com.ninja_squad.dbsetup.DbSetup
 import com.ninja_squad.dbsetup.Operations.deleteAllFrom
 import com.ninja_squad.dbsetup.Operations.sequenceOf
 import com.ninja_squad.dbsetup.destination.DataSourceDestination
-import com.ninja_squad.dbsetup.destination.DriverManagerDestination
-import com.ninja_squad.dbsetup.operation.Operation
-import com.ninja_squad.dbsetup_kotlin.DbSetupBuilder
 import com.ninja_squad.dbsetup_kotlin.insertInto
-import io.mockk.verify
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.shouldNotBeNull
 import org.junit.jupiter.api.AfterEach
@@ -18,19 +14,13 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Profile
-import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 import javax.sql.DataSource
-import javax.xml.crypto.Data
 
 
 @SpringBootTest
-internal class UserEntityDaoTest {
+internal class UserDaoTest {
 
     @Autowired
     lateinit var dataSource: DataSource
