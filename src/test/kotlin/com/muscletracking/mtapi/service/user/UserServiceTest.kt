@@ -33,7 +33,7 @@ internal class UserServiceTest {
     @DisplayName("DBからユーザー検索で正しい値が帰ってくる")
     fun getUserByIdTest() {
         // expected
-        val expected = UserEntity(id = "ryio1010", userName = "ryo", password = "ryio1010")
+        val expected = UserEntity(userId = "ryio1010", userName = "ryo", password = "ryio1010")
 
         val inputUserId: String = "001"
         every { userRepository.getUserById(inputUserId) } returns expected
@@ -43,7 +43,7 @@ internal class UserServiceTest {
 
         verify(exactly = 1) { userRepository.getUserById(any()) }
 
-        expected.id `should be equal to` actual.id
+        expected.userId `should be equal to` actual.userId
         expected.userName `should be equal to` actual.userName
         expected.password `should be equal to` actual.password
 
@@ -54,7 +54,7 @@ internal class UserServiceTest {
     @DisplayName("新規ユーザーを1件登録できる")
     fun addNewUserTest() {
         // expected
-        val expected = UserEntity(id = "ryio1010", userName = "ryo", password = "ryio1010")
+        val expected = UserEntity(userId = "ryio1010", userName = "ryo", password = "ryio1010")
         every { userRepository.addNewUser(any()) } returns expected
 
         // actual
@@ -62,7 +62,7 @@ internal class UserServiceTest {
 
         verify(exactly = 1) { userRepository.addNewUser(any()) }
 
-        expected.id `should be equal to` actual.id
+        expected.userId `should be equal to` actual.userId
         expected.userName `should be equal to` actual.userName
         expected.password `should be equal to` actual.password
 

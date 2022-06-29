@@ -1,9 +1,9 @@
 package com.muscletracking.mtapi.entity.user
 
 data class UserResponse(
-    val id: String,
+    val userId: String,
 
-    val name: String,
+    val userName: String,
 
     val password: String,
 )

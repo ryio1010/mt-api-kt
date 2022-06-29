@@ -57,7 +57,7 @@ internal class UserDaoTest {
 
         // assertion
         actual.shouldNotBeNull()
-        actual.id `should be equal to` "test1"
+        actual.userId `should be equal to` "test1"
         actual.userName `should be equal to` "テストユーザー"
         actual.password `should be equal to` "test1"
         actual.regId `should be equal to` "test1"
@@ -73,10 +73,10 @@ internal class UserDaoTest {
         DbSetup(dest, opt).launch()
 
         val newUser: UserEntity =
-            UserEntity(id = "test1", userName = "テストユーザー", password = "test1", regId = "test1", updId = "test1")
+            UserEntity(userId = "test1", userName = "テストユーザー", password = "test1", regId = "test1", updId = "test1")
         val insert = userDao.insertNewUser(newUser)
 
-        insert.entity.id.`should be equal to`("test1")
+        insert.entity.userId.`should be equal to`("test1")
         insert.entity.userName.`should be equal to`("テストユーザー")
         insert.entity.password.`should be equal to`("test1")
     }
@@ -98,7 +98,7 @@ internal class UserDaoTest {
         DbSetup(dest, ops).launch()
 
         val updateUser =
-            UserEntity(id = "test1", userName = "テストユーザー2", password = "updated", regId = "test1", updId = "test1")
+            UserEntity(userId = "test1", userName = "テストユーザー2", password = "updated", regId = "test1", updId = "test1")
         val update = userDao.updateUser(updateUser)
 
         update.entity.userName.`should be equal to`("テストユーザー2")

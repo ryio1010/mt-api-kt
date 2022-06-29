@@ -37,20 +37,9 @@ internal class UserRestControllerTest {
     }
 
     @Test
-    @DisplayName("demo関数は文字列のHello World！を返す")
-    fun demo() {
-        // 期待値
-        val expected = "Hello Github Actions !!"
-        // 実行と比較
-        mockMvc.perform(get("/demo"))
-            .andExpect(status().isOk)
-            .andExpect(content().string(expected))
-    }
-
-    @Test
     @DisplayName("testDoma関数はユーザーIDryio1010のユーザー情報を返す")
     fun testDoma() {
-        mockMvc.perform(get("/test").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/user/test").contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.id").value("ryio1010"))
             .andExpect(jsonPath("$.name").value("ryo"))
