@@ -39,13 +39,13 @@ internal class UserServiceTest {
         every { userRepository.getUserById(inputUserId) } returns expected
 
         // actual
-        val actual: UserEntity = userService.getUserById(inputUserId)
+        val actual: UserEntity? = userService.getUserById(inputUserId)
 
         verify(exactly = 1) { userRepository.getUserById(any()) }
 
-        expected.userId `should be equal to` actual.userId
-        expected.userName `should be equal to` actual.userName
-        expected.password `should be equal to` actual.password
+        expected.userId `should be equal to` actual!!.userId
+        expected.userName `should be equal to` actual!!.userName
+        expected.password `should be equal to` actual!!.password
 
         confirmVerified(userRepository)
     }

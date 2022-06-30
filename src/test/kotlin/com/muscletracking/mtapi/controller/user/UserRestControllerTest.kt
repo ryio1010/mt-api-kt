@@ -2,6 +2,9 @@ package com.muscletracking.mtapi.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.muscletracking.mtapi.controller.user.UserRestController
+import com.muscletracking.mtapi.entity.user.UserForm
+import com.muscletracking.mtapi.service.user.UserService
+import io.mockk.mockk
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -49,10 +52,17 @@ internal class UserRestControllerTest {
     @Test
     @DisplayName("addNewUser関数はDBに新規ユーザーを1件登録できる")
     fun addNewUserTest() {
-        mockMvc.perform(post("/user/add").contentType(MediaType.APPLICATION_JSON))
+        val userForm = UserForm(userId = "test3", userName = "テストユーザー１", password = "test1pass")
+        mockMvc.perform(post("/user/add").flashAttr("userForm", userForm).contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.userId").value("test1"))
             .andExpect(jsonPath("$.userName").value("テストユーザー１"))
             .andExpect(jsonPath("$.password").value("test1pass"))
+    }
+
+    @Test
+    @DisplayName("addNewUser関数はuseridが重複する場合、DuplicateUserIdExceptionを発生させる")
+    fun addNewUserExceptionTest(){
+            val mockService = mockk<UserService>()
     }
 }

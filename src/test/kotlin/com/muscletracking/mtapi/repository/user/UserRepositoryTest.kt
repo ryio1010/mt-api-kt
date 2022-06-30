@@ -40,9 +40,9 @@ internal class UserRepositoryTest {
 
         verify(exactly = 1) { userRepository.getUserById(any()) }
 
-        expected.userId `should be equal to` actual.userId
-        expected.userName `should be equal to` actual.userName
-        expected.password `should be equal to` actual.password
+        expected.userId `should be equal to` actual!!.userId
+        expected.userName `should be equal to` actual!!.userName
+        expected.password `should be equal to` actual!!.password
 
         confirmVerified(userDao)
     }

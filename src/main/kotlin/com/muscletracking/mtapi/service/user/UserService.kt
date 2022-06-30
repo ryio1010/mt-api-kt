@@ -12,7 +12,7 @@ class UserService {
     @Autowired
     lateinit var userRepository: UserRepository
 
-    fun getUserById(userId: String): UserEntity {
+    fun getUserById(userId: String): UserEntity? {
         return userRepository.getUserById(userId)
     }
 
