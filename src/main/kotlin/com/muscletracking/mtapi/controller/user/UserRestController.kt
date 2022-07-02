@@ -19,21 +19,15 @@ class UserRestController {
     @Autowired
     lateinit var modelMapper: ModelMapper
 
-    @GetMapping("/test")
-    fun testDoma(): UserResponse {
-        val user = userService.getUserById("ryio1010")
-        println(user)
-        return UserResponse(user!!.userId, user!!.userName, user!!.password)
-    }
-
     @PostMapping("/add")
     fun addNewUser(@ModelAttribute userForm: UserForm): UserResponse {
+        // userId重複チェック
         val isUsedId = userService.getUserById(userForm.userId) != null
-
         if (isUsedId) {
             throw DuplicateIdException()
         }
 
+        // ユーザー新規登録
         val addUser = UserEntity(
             userId = userForm.userId,
             userName = userForm.userName,
@@ -42,8 +36,9 @@ class UserRestController {
             updId = userForm.userId
         )
         // modelMapper.map(userForm, addUser)
-
         val addedUser = userService.addNewUser(addUser)
+
+        // response作成
         return UserResponse(addedUser.userId, addUser.userName, addUser.password)
     }
 }

@@ -58,16 +58,6 @@ internal class UserRestControllerTest {
     }
 
     @Test
-    @DisplayName("testDoma関数はユーザーIDryio1010のユーザー情報を返す")
-    fun testDoma() {
-        mockMvc.perform(get("/user/test").contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$.id").value("ryio1010"))
-            .andExpect(jsonPath("$.name").value("ryo"))
-            .andExpect(jsonPath("$.password").value("ryio1010"))
-    }
-
-    @Test
     @DisplayName("addNewUser関数はDBに新規ユーザーを1件登録できる")
     fun addNewUserTest() {
         mockMvc.perform(post("/user/add").flashAttr("userForm", userForm).contentType(MediaType.APPLICATION_JSON))
