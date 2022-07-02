@@ -13,7 +13,7 @@ import org.seasar.doma.jdbc.Result
 @Dao
 interface UserDao {
     @Select
-    fun selectById(userId: String): UserEntity
+    fun selectById(userId: String): UserEntity?
 
     @Insert
     fun insertNewUser(newUser: UserEntity): Result<UserEntity>

@@ -41,15 +41,25 @@ repositories {
 }
 
 dependencies {
+	// spring boot
 	implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
 	implementation ("org.springframework.boot:spring-boot-starter-web")
+
+	// kotlin
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
+	// model mapper
+	implementation("org.modelmapper:modelmapper:3.1.0")
+
+	// gcp gae
 	implementation("com.google.appengine:appengine-api-1.0-sdk:+")
+
 	compileOnly("org.projectlombok:lombok")
 	runtimeOnly("org.postgresql:postgresql")
 	annotationProcessor("org.projectlombok:lombok")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test"){
 		exclude("junit")
 	}

@@ -9,7 +9,7 @@ import java.time.LocalDateTime.now
 data class UserEntity(
     @Id
     @Column(name = "userid")
-    val id: String = "",
+    val userId: String = "",
 
     @Column(name = "username")
     val userName: String = "",

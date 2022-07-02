@@ -11,7 +11,7 @@ class UserRepository {
     @Autowired
     lateinit var userDao: UserDao
 
-    fun getUserById(userId: String): UserEntity {
+    fun getUserById(userId: String): UserEntity? {
         return userDao.selectById(userId)
     }
 

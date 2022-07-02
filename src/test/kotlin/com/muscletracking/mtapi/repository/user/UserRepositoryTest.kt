@@ -11,9 +11,8 @@ import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
-import org.seasar.doma.jdbc.Result
 
-internal class UserEntityRepositoryTest {
+internal class UserRepositoryTest {
 
     @InjectMockKs
     private var userRepository: UserRepository = UserRepository()
@@ -33,7 +32,7 @@ internal class UserEntityRepositoryTest {
     @Test
     @DisplayName("ID検索でユーザー情報を1件取得できる")
     fun getUserById() {
-        val expected = UserEntity(id = "ryio1010", userName = "ryo", password = "ryio1010")
+        val expected = UserEntity(userId = "ryio1010", userName = "ryo", password = "ryio1010")
 
         every { userDao.selectById(any()) } returns expected
 
@@ -41,9 +40,9 @@ internal class UserEntityRepositoryTest {
 
         verify(exactly = 1) { userRepository.getUserById(any()) }
 
-        expected.id `should be equal to` actual.id
-        expected.userName `should be equal to` actual.userName
-        expected.password `should be equal to` actual.password
+        expected.userId `should be equal to` actual!!.userId
+        expected.userName `should be equal to` actual!!.userName
+        expected.password `should be equal to` actual!!.password
 
         confirmVerified(userDao)
     }
@@ -51,15 +50,17 @@ internal class UserEntityRepositoryTest {
     @Test
     @DisplayName("新規ユーザーを1件登録できる")
     fun addNewUser() {
-        val expected = UserEntity(id = "test1", userName = "testUser", password = "test1")
+        val expected = UserEntity(userId = "test1", userName = "testUser", password = "test1")
         every { userDao.insertNewUser(any()).entity } returns expected
 
         val actual = userRepository.addNewUser(expected)
 
         verify(exactly = 1) { userRepository.addNewUser(any()) }
 
-        expected.id `should be equal to` actual.id
+        expected.userId `should be equal to` actual.userId
         expected.userName `should be equal to` actual.userName
         expected.password `should be equal to` actual.password
+
+        confirmVerified(userDao)
     }
 }
