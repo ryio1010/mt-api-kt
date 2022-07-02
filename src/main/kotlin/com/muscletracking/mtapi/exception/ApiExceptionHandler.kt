@@ -15,7 +15,7 @@ class ApiExceptionHandler : ResponseEntityExceptionHandler() {
     @ExceptionHandler(DuplicateIdException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleDuplicateIdException(ex: DuplicateIdException, request: WebRequest): ResponseEntity<Any> {
-        val response = ExceptionResponse(HttpStatus.BAD_REQUEST.toString(), "キーが重複しています。")
+        val response = ExceptionResponse(HttpStatus.BAD_REQUEST.toString(), "Duplicate key detected!!")
         return super.handleExceptionInternal(ex, response, HttpHeaders.EMPTY, HttpStatus.BAD_REQUEST, request)
     }
 }

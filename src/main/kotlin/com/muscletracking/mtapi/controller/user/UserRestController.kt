@@ -34,7 +34,6 @@ class UserRestController {
             throw DuplicateIdException()
         }
 
-
         val addUser = UserEntity(
             userId = userForm.userId,
             userName = userForm.userName,
