@@ -1,12 +1,10 @@
-server:
-  port: 8080
-
 spring:
   datasource:
-    driver-class-name: org.postgresql.Driver
-    url: ${DATASOURCE:jdbc:postgresql://localhost:5433/muscletracking?currentSchema=test}
-    username: mtadmin
-    password: mtadmin
-
-doma:
-  dialect: POSTGRES
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+#    schema: classpath:schema.sql
+  h2:
+    console:
+      enabled: true

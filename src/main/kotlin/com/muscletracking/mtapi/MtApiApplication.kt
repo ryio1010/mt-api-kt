@@ -22,6 +22,5 @@ fun dataSource(dataSourceProperties: DataSourceProperties): DataSource {
     val dataSource =
         DriverManagerDataSource(dataSourceProperties.url, dataSourceProperties.username, dataSourceProperties.password)
     dataSource.setDriverClassName(dataSourceProperties.driverClassName)
-    dataSource.schema = "test_schema"
     return TransactionAwareDataSourceProxy(dataSource)
 }

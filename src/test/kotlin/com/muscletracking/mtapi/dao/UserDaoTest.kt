@@ -5,11 +5,9 @@ import com.muscletracking.mtapi.entity.user.UserEntity
 import com.ninja_squad.dbsetup.DbSetup
 import com.ninja_squad.dbsetup.Operations.deleteAllFrom
 import com.ninja_squad.dbsetup.Operations.sequenceOf
-import com.ninja_squad.dbsetup.bind.DefaultBinderConfiguration
 import com.ninja_squad.dbsetup.destination.DataSourceDestination
 import com.ninja_squad.dbsetup.destination.Destination
 import com.ninja_squad.dbsetup.operation.DeleteAll
-import com.ninja_squad.dbsetup_kotlin.dbSetup
 import com.ninja_squad.dbsetup_kotlin.insertInto
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.shouldNotBeNull
@@ -20,8 +18,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.transaction.annotation.Transactional
-import java.sql.Connection
+import org.springframework.test.context.TestPropertySource
 import java.time.LocalDateTime
 import javax.sql.DataSource
 
@@ -31,8 +28,9 @@ import javax.sql.DataSource
  * 原則としてテスト終了後、データの削除は行わない
  * test schemaを利用してテストを行う
  */
-@ActiveProfiles("test")
+
 @SpringBootTest
+@ActiveProfiles("test")
 internal class UserDaoTest {
 
     @Autowired
@@ -43,7 +41,6 @@ internal class UserDaoTest {
 
     // dbsetup設定
     lateinit var destination: Destination
-
     lateinit var deleteAllUserTable: DeleteAll
 
     @BeforeEach
