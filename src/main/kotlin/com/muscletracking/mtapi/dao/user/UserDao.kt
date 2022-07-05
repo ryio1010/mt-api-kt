@@ -1,7 +1,6 @@
 package com.muscletracking.mtapi.dao.user
 
 import com.muscletracking.mtapi.entity.user.UserEntity
-import org.apache.catalina.User
 import org.seasar.doma.Dao
 import org.seasar.doma.Insert
 import org.seasar.doma.Select

@@ -52,10 +52,15 @@ dependencies {
 	// gcp gae
 	implementation("com.google.appengine:appengine-api-1.0-sdk")
 
+	// lombok
 	compileOnly("org.projectlombok:lombok")
-	runtimeOnly("org.postgresql:postgresql")
 	annotationProcessor("org.projectlombok:lombok")
 
+	// PostgreSQL
+	runtimeOnly("org.postgresql:postgresql")
+
+
+	// spring-boot-test
 	testImplementation("org.springframework.boot:spring-boot-starter-test"){
 		exclude("junit")
 	}
