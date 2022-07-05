@@ -15,12 +15,3 @@ class MtApiApplication
 fun main(args: Array<String>) {
     runApplication<MtApiApplication>(*args)
 }
-
-@Bean
-@Autowired
-fun dataSource(dataSourceProperties: DataSourceProperties): DataSource {
-    val dataSource =
-        DriverManagerDataSource(dataSourceProperties.url, dataSourceProperties.username, dataSourceProperties.password)
-    dataSource.setDriverClassName(dataSourceProperties.driverClassName)
-    return TransactionAwareDataSourceProxy(dataSource)
-}

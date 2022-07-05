@@ -9,6 +9,7 @@ import com.ninja_squad.dbsetup.destination.DataSourceDestination
 import com.ninja_squad.dbsetup.destination.Destination
 import com.ninja_squad.dbsetup.operation.DeleteAll
 import com.ninja_squad.dbsetup_kotlin.insertInto
+import junit.framework.TestCase.assertTrue
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.shouldNotBeNull
 import org.junit.jupiter.api.AfterEach
@@ -18,20 +19,45 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.DynamicPropertyRegistry
+import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.context.TestPropertySource
+import org.testcontainers.containers.PostgisContainerProvider
+import org.testcontainers.containers.PostgreSQLContainer
+import org.testcontainers.containers.PostgreSQLContainerProvider
+import org.testcontainers.junit.jupiter.Container
+import org.testcontainers.junit.jupiter.Testcontainers
+import org.testcontainers.utility.DockerImageName
 import java.time.LocalDateTime
 import javax.sql.DataSource
 
 /**
- * Dbsetupを利用したテストを行う
- * Dbsetupはテスト前にテストテーブルを全削除・テストデータのインサート・テストの順で実行する
+ * DbSetupを利用したテストを行う
+ * DbSetupは原則としてテーブルを全削除・データのインサート・テストの順で実行する
  * 原則としてテスト終了後、データの削除は行わない
- * test schemaを利用してテストを行う
+ * TestContainersを利用してテストを行う
  */
-
+@Testcontainers
 @SpringBootTest
 @ActiveProfiles("test")
 internal class UserDaoTest {
+
+    companion object {
+        @Container
+        @JvmStatic
+        val postgres = PostgreSQLContainer(DockerImageName.parse("postgres:12.6-alpine")).apply {
+            withDatabaseName("testdb")
+            withUsername("testuser")
+            withPassword("testuser")
+            withInitScript("schema.sql")
+        }
+
+        @DynamicPropertySource
+        @JvmStatic
+        fun setup(registry: DynamicPropertyRegistry) {
+            registry.add("spring.datasource.url", postgres::getJdbcUrl)
+        }
+    }
 
     @Autowired
     lateinit var dataSource: DataSource
@@ -39,7 +65,7 @@ internal class UserDaoTest {
     @Autowired
     lateinit var userDao: UserDao
 
-    // dbsetup設定
+    // DBSetup設定
     lateinit var destination: Destination
     lateinit var deleteAllUserTable: DeleteAll
 
@@ -51,6 +77,11 @@ internal class UserDaoTest {
 
     @AfterEach
     fun tearDown() {
+    }
+
+    @Test
+    fun test() {
+        assertTrue(postgres.isRunning)
     }
 
     @Test
