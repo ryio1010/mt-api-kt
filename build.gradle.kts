@@ -40,6 +40,7 @@ dependencies {
 	// spring boot
 	implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
 	implementation ("org.springframework.boot:spring-boot-starter-web")
+	implementation ("org.springframework.boot:spring-boot-starter-aop")
 
 	// kotlin
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
