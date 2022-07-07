@@ -28,7 +28,7 @@ import javax.sql.DataSource
  * TestContainersを利用してテストを行う
  */
 @SpringBootTest
-internal class UserDaoTest: DaoBaseTest() {
+internal class UserDaoTest : DaoBaseTest() {
 
     @Autowired
     lateinit var dataSource: DataSource
@@ -89,15 +89,21 @@ internal class UserDaoTest: DaoBaseTest() {
         DbSetup(destination, operation).launch()
 
         val newUser =
-            UserEntity(userId = "test1", userName = "テストユーザー", password = "test1", regId = "test1", updId = "test1")
-        val insert = userDao.insertNewUser(newUser)
+            UserEntity(userId = "test1", userName = "テストユーザー", password = "test1")
+        userDao.insertNewUser(newUser)
 
-        val actual = insert.entity
+        val actual = userDao.selectById("test1")
 
-        assertThat(actual).isNotNull()
-        assertThat(actual?.userId).isEqualTo("test1")
-        assertThat(actual?.userName).isEqualTo("テストユーザー")
-        assertThat(actual?.password).isEqualTo("test1")
+        actual?.let {
+            assertThat(it).isNotNull()
+            assertThat(it.userId).isEqualTo("test1")
+            assertThat(it.userName).isEqualTo("テストユーザー")
+            assertThat(it.password).isEqualTo("test1")
+            assertThat(it.regId).isEqualTo("test1")
+            assertThat(it.updId).isEqualTo("test1")
+        }
+
+
     }
 
     @Test
@@ -116,12 +122,18 @@ internal class UserDaoTest: DaoBaseTest() {
         DbSetup(destination, operation).launch()
 
         val updateUser =
-            UserEntity(userId = "test1", userName = "テストユーザー2", password = "updated", regId = "test1", updId = "test1")
-        val update = userDao.updateUser(updateUser)
+            UserEntity(userId = "test1", userName = "テストユーザー2", password = "updated")
+        updateUser.regId = "test1"
+        updateUser.redDate = LocalDateTime.now()
+        userDao.updateUser(updateUser)
 
-        val actual = update.entity
+        val actual = userDao.selectById("test1")
 
-        assertThat(actual?.userName).isEqualTo("テストユーザー2")
-        assertThat(actual?.password).isEqualTo("updated")
+        actual?.let {
+            assertThat(it.userName).isEqualTo("テストユーザー2")
+            assertThat(it.password).isEqualTo("updated")
+            assertThat(it.regId).isEqualTo("test1")
+            assertThat(it.updId).isEqualTo("test1")
+        }
     }
 }

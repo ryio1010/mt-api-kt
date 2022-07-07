@@ -1,6 +1,7 @@
 package com.muscletracking.mtapi.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.common.truth.Truth.assertThat
 import com.muscletracking.mtapi.controller.user.UserRestController
 import com.muscletracking.mtapi.entity.user.UserForm
 import com.muscletracking.mtapi.exception.ApiExceptionHandler
@@ -82,7 +83,7 @@ internal class UserRestControllerTest {
         ).andExpect(status().isBadRequest).andReturn().response.contentAsString
 
         val errorResponse = objectMapper.readValue(response, ExceptionResponse::class.java)
-        errorResponse.errorCode `should be equal to` "400 BAD_REQUEST"
-        errorResponse.errorMessage `should be equal to` "Duplicate key detected!!"
+        assertThat(errorResponse.errorCode).isEqualTo("400 BAD_REQUEST")
+        assertThat(errorResponse.errorMessage).isEqualTo("Duplicate key detected!!")
     }
 }

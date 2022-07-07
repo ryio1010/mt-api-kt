@@ -1,5 +1,6 @@
 package com.muscletracking.mtapi.service
 
+import com.google.common.truth.Truth
 import com.muscletracking.mtapi.entity.user.UserEntity
 import com.muscletracking.mtapi.repository.user.UserRepository
 import com.muscletracking.mtapi.service.user.UserService
@@ -43,10 +44,11 @@ internal class UserServiceTest {
 
         verify(exactly = 1) { userRepository.getUserById(any()) }
 
-        expected.userId `should be equal to` actual!!.userId
-        expected.userName `should be equal to` actual!!.userName
-        expected.password `should be equal to` actual!!.password
-
+        actual?.let {
+            Truth.assertThat(it.userId).isEqualTo(expected.userId)
+            Truth.assertThat(it.userName).isEqualTo(expected.userName)
+            Truth.assertThat(it.password).isEqualTo(expected.password)
+        }
         confirmVerified(userRepository)
     }
 
@@ -55,16 +57,12 @@ internal class UserServiceTest {
     fun addNewUserTest() {
         // expected
         val expected = UserEntity(userId = "ryio1010", userName = "ryo", password = "ryio1010")
-        every { userRepository.addNewUser(any()) } returns expected
+        every { userRepository.addNewUser(any()) } returns 1
 
         // actual
-        val actual: UserEntity = userService.addNewUser(expected)
+        userService.addNewUser(expected)
 
         verify(exactly = 1) { userRepository.addNewUser(any()) }
-
-        expected.userId `should be equal to` actual.userId
-        expected.userName `should be equal to` actual.userName
-        expected.password `should be equal to` actual.password
 
         confirmVerified(userRepository)
     }

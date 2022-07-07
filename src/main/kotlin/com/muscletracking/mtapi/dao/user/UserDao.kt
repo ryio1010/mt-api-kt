@@ -15,8 +15,8 @@ interface UserDao {
     fun selectById(userId: String): UserEntity?
 
     @Insert
-    fun insertNewUser(newUser: UserEntity): Result<UserEntity>
+    fun insertNewUser(newUser: UserEntity): Int
 
     @Update
-    fun updateUser(updateUser: UserEntity): Result<UserEntity>
+    fun updateUser(updateUser: UserEntity): Int
 }

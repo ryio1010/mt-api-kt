@@ -1,5 +1,6 @@
 package com.muscletracking.mtapi.repository.user
 
+import com.google.common.truth.Truth
 import com.muscletracking.mtapi.dao.user.UserDao
 import com.muscletracking.mtapi.entity.user.UserEntity
 import io.mockk.*
@@ -40,10 +41,11 @@ internal class UserRepositoryTest {
 
         verify(exactly = 1) { userRepository.getUserById(any()) }
 
-        expected.userId `should be equal to` actual!!.userId
-        expected.userName `should be equal to` actual!!.userName
-        expected.password `should be equal to` actual!!.password
-
+        actual?.let {
+            Truth.assertThat(it.userId).isEqualTo(expected.userId)
+            Truth.assertThat(it.userName).isEqualTo(expected.userName)
+            Truth.assertThat(it.password).isEqualTo(expected.password)
+        }
         confirmVerified(userDao)
     }
 
@@ -51,15 +53,11 @@ internal class UserRepositoryTest {
     @DisplayName("新規ユーザーを1件登録できる")
     fun addNewUser() {
         val expected = UserEntity(userId = "test1", userName = "testUser", password = "test1")
-        every { userDao.insertNewUser(any()).entity } returns expected
+        every { userDao.insertNewUser(any()) } returns 1
 
-        val actual = userRepository.addNewUser(expected)
+        userRepository.addNewUser(expected)
 
         verify(exactly = 1) { userRepository.addNewUser(any()) }
-
-        expected.userId `should be equal to` actual.userId
-        expected.userName `should be equal to` actual.userName
-        expected.password `should be equal to` actual.password
 
         confirmVerified(userDao)
     }
