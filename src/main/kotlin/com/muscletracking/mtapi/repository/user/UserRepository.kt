@@ -15,7 +15,7 @@ class UserRepository {
         return userDao.selectById(userId)
     }
 
-    fun addNewUser(newUser: UserEntity): UserEntity {
-        return userDao.insertNewUser(newUser).entity
+    fun addNewUser(newUser: UserEntity): Int {
+        return userDao.insertNewUser(newUser)
     }
 }

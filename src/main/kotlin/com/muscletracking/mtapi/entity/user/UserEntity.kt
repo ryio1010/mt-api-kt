@@ -1,35 +1,29 @@
 package com.muscletracking.mtapi.entity.user
 
+import com.muscletracking.mtapi.entity.BaseColumnEntity
 import org.seasar.doma.*
 import java.time.LocalDateTime
 import java.time.LocalDateTime.now
+import javax.print.attribute.standard.JobOriginatingUserName
 
-@Entity(immutable = true)
+@Entity
 @Table(name = "m_user")
-data class UserEntity(
+class UserEntity() : BaseColumnEntity() {
     @Id
     @Column(name = "userid")
-    val userId: String = "",
+    var userId: String = ""
 
     @Column(name = "username")
-    val userName: String = "",
+    var userName: String = ""
 
     @Column(name = "password")
-    val password: String = "",
+    var password: String = ""
 
-    @Column(name = "regid")
-    val regId: String = "",
-
-    @Column(name = "regdate")
-    val regDate: LocalDateTime = now(),
-
-    @Column(name = "updid")
-    val updId: String = "",
-
-    @Column(name = "upddate")
-    val updDate: LocalDateTime = now(),
-
-    @Version
-    @Column(name = "version")
-    val version: Int = 1,
-)
+    constructor(userId: String, userName: String, password: String) : this() {
+        this.userId = userId
+        this.userName = userName
+        this.password = password
+        this.auditUser = userId
+        this.auditDateTime = LocalDateTime.now()
+    }
+}

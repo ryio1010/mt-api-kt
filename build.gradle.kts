@@ -7,7 +7,6 @@ buildscript {
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:2.2.0.RELEASE")
 		classpath("com.google.cloud.tools:appengine-gradle-plugin:2.2.0'")
-		classpath("com.maeharin:factlin:0.1.1")
 	}
 }
 
@@ -20,9 +19,6 @@ plugins {
 	id("org.seasar.doma.compile") version "1.1.0"
 	id("com.google.cloud.tools.appengine") version "2.2.0"
 }
-
-apply(plugin = "factlin")
-
 
 group = "com.muscletracking"
 version = "0.0.1-SNAPSHOT"
@@ -44,6 +40,7 @@ dependencies {
 	// spring boot
 	implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
 	implementation ("org.springframework.boot:spring-boot-starter-web")
+	implementation ("org.springframework.boot:spring-boot-starter-aop")
 
 	// kotlin
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -54,12 +51,17 @@ dependencies {
 	implementation("org.modelmapper:modelmapper:3.1.0")
 
 	// gcp gae
-	implementation("com.google.appengine:appengine-api-1.0-sdk:+")
+	implementation("com.google.appengine:appengine-api-1.0-sdk")
 
+	// lombok
 	compileOnly("org.projectlombok:lombok")
-	runtimeOnly("org.postgresql:postgresql")
 	annotationProcessor("org.projectlombok:lombok")
 
+	// PostgreSQL
+	runtimeOnly("org.postgresql:postgresql")
+
+
+	// spring-boot-test
 	testImplementation("org.springframework.boot:spring-boot-starter-test"){
 		exclude("junit")
 	}
@@ -74,8 +76,16 @@ dependencies {
 	// kluent
 	testImplementation ("org.amshove.kluent:kluent:1.68")
 
+	// truth
+	testImplementation("com.google.truth:truth:1.1.3")
+
 	// dbsetup-kotlin
 	testImplementation("com.ninja-squad:DbSetup-kotlin:2.1.0")
+
+	// testcontainers
+	testImplementation("org.testcontainers:testcontainers:1.17.3")
+	testImplementation("org.testcontainers:junit-jupiter:1.17.3")
+	testImplementation("org.testcontainers:postgresql:1.17.3")
 
 	// doma2
 	runtimeOnly("com.h2database:h2:1.4.191")

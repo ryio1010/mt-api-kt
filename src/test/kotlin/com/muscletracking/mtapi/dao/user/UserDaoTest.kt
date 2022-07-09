@@ -1,39 +1,33 @@
-package com.muscletracking.mtapi.dao
+package com.muscletracking.mtapi.dao.user
 
-import com.muscletracking.mtapi.dao.user.UserDao
+import com.google.common.truth.Truth.assertThat
+import com.muscletracking.mtapi.dao.DaoBaseTest
 import com.muscletracking.mtapi.entity.user.UserEntity
 import com.ninja_squad.dbsetup.DbSetup
 import com.ninja_squad.dbsetup.Operations.deleteAllFrom
 import com.ninja_squad.dbsetup.Operations.sequenceOf
-import com.ninja_squad.dbsetup.bind.DefaultBinderConfiguration
 import com.ninja_squad.dbsetup.destination.DataSourceDestination
 import com.ninja_squad.dbsetup.destination.Destination
 import com.ninja_squad.dbsetup.operation.DeleteAll
-import com.ninja_squad.dbsetup_kotlin.dbSetup
 import com.ninja_squad.dbsetup_kotlin.insertInto
-import org.amshove.kluent.`should be equal to`
-import org.amshove.kluent.shouldNotBeNull
+import junit.framework.TestCase.assertTrue
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.ActiveProfiles
-import org.springframework.transaction.annotation.Transactional
-import java.sql.Connection
 import java.time.LocalDateTime
 import javax.sql.DataSource
 
 /**
- * Dbsetupを利用したテストを行う
- * Dbsetupはテスト前にテストテーブルを全削除・テストデータのインサート・テストの順で実行する
+ * DbSetupを利用したテストを行う
+ * DbSetupは原則としてテーブルを全削除・データのインサート・テストの順で実行する
  * 原則としてテスト終了後、データの削除は行わない
- * test schemaを利用してテストを行う
+ * TestContainersを利用してテストを行う
  */
-@ActiveProfiles("test")
 @SpringBootTest
-internal class UserDaoTest {
+internal class UserDaoTest : DaoBaseTest() {
 
     @Autowired
     lateinit var dataSource: DataSource
@@ -41,9 +35,8 @@ internal class UserDaoTest {
     @Autowired
     lateinit var userDao: UserDao
 
-    // dbsetup設定
+    // DBSetup設定
     lateinit var destination: Destination
-
     lateinit var deleteAllUserTable: DeleteAll
 
     @BeforeEach
@@ -54,6 +47,11 @@ internal class UserDaoTest {
 
     @AfterEach
     fun tearDown() {
+    }
+
+    @Test
+    fun test() {
+        assertTrue(postgres.isRunning)
     }
 
     @Test
@@ -75,12 +73,12 @@ internal class UserDaoTest {
         val actual = userDao.selectById("test1")
 
         // assertion
-        actual.shouldNotBeNull()
-        actual.userId `should be equal to` "test1"
-        actual.userName `should be equal to` "テストユーザー"
-        actual.password `should be equal to` "test1"
-        actual.regId `should be equal to` "test1"
-        actual.regId `should be equal to` "test1"
+        assertThat(actual).isNotNull()
+        assertThat(actual?.userId).isEqualTo("test1")
+        assertThat(actual?.userName).isEqualTo("テストユーザー")
+        assertThat(actual?.password).isEqualTo("test1")
+        assertThat(actual?.regId).isEqualTo("test1")
+        assertThat(actual?.updId).isEqualTo("test1")
     }
 
     @Test
@@ -90,12 +88,21 @@ internal class UserDaoTest {
         DbSetup(destination, operation).launch()
 
         val newUser =
-            UserEntity(userId = "test1", userName = "テストユーザー", password = "test1", regId = "test1", updId = "test1")
-        val insert = userDao.insertNewUser(newUser)
+            UserEntity(userId = "test1", userName = "テストユーザー", password = "test1")
+        userDao.insertNewUser(newUser)
 
-        insert.entity.userId.`should be equal to`("test1")
-        insert.entity.userName.`should be equal to`("テストユーザー")
-        insert.entity.password.`should be equal to`("test1")
+        val actual = userDao.selectById("test1")
+
+        actual?.let {
+            assertThat(it).isNotNull()
+            assertThat(it.userId).isEqualTo("test1")
+            assertThat(it.userName).isEqualTo("テストユーザー")
+            assertThat(it.password).isEqualTo("test1")
+            assertThat(it.regId).isEqualTo("test1")
+            assertThat(it.updId).isEqualTo("test1")
+        }
+
+
     }
 
     @Test
@@ -114,11 +121,18 @@ internal class UserDaoTest {
         DbSetup(destination, operation).launch()
 
         val updateUser =
-            UserEntity(userId = "test1", userName = "テストユーザー2", password = "updated", regId = "test1", updId = "test1")
-        val update = userDao.updateUser(updateUser)
+            UserEntity(userId = "test1", userName = "テストユーザー2", password = "updated")
+        updateUser.regId = "test1"
+        updateUser.redDate = LocalDateTime.now()
+        userDao.updateUser(updateUser)
 
-        update.entity.userName.`should be equal to`("テストユーザー2")
-        update.entity.password.`should be equal to`("updated")
+        val actual = userDao.selectById("test1")
 
+        actual?.let {
+            assertThat(it.userName).isEqualTo("テストユーザー2")
+            assertThat(it.password).isEqualTo("updated")
+            assertThat(it.regId).isEqualTo("test1")
+            assertThat(it.updId).isEqualTo("test1")
+        }
     }
 }

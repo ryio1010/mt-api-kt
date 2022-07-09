@@ -16,7 +16,7 @@ class UserService {
         return userRepository.getUserById(userId)
     }
 
-    fun addNewUser(newUser: UserEntity): UserEntity {
+    fun addNewUser(newUser: UserEntity): Int {
         return userRepository.addNewUser(newUser)
     }
 }
