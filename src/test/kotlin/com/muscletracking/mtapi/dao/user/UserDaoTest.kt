@@ -1,8 +1,7 @@
-package com.muscletracking.mtapi.dao
+package com.muscletracking.mtapi.dao.user
 
 import com.google.common.truth.Truth.assertThat
-import com.muscletracking.mtapi.DaoBaseTest
-import com.muscletracking.mtapi.dao.user.UserDao
+import com.muscletracking.mtapi.dao.DaoBaseTest
 import com.muscletracking.mtapi.entity.user.UserEntity
 import com.ninja_squad.dbsetup.DbSetup
 import com.ninja_squad.dbsetup.Operations.deleteAllFrom

@@ -1,4 +1,4 @@
-package com.muscletracking.mtapi
+package com.muscletracking.mtapi.dao
 
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.DynamicPropertyRegistry

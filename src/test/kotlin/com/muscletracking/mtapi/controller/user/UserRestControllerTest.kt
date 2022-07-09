@@ -3,57 +3,48 @@ package com.muscletracking.mtapi.controller
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.truth.Truth.assertThat
 import com.muscletracking.mtapi.controller.user.UserRestController
+import com.muscletracking.mtapi.entity.user.UserEntity
 import com.muscletracking.mtapi.entity.user.UserForm
-import com.muscletracking.mtapi.exception.ApiExceptionHandler
 import com.muscletracking.mtapi.exception.DuplicateIdException
 import com.muscletracking.mtapi.exception.ExceptionResponse
 import com.muscletracking.mtapi.service.user.UserService
 import io.mockk.MockKAnnotations
 import io.mockk.every
-import io.mockk.impl.annotations.InjectMockKs
-import io.mockk.impl.annotations.MockK
-import io.mockk.mockk
-import org.amshove.kluent.`should be equal to`
-import org.apache.catalina.User
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.DisplayName
+import org.mockito.Mockito
+import org.mockito.Mockito.*
+import org.modelmapper.ModelMapper
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.MockMvcBuilder
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
-import org.springframework.test.web.servlet.setup.MockMvcBuilders
 
-@SpringBootTest
-@AutoConfigureMockMvc
-internal class UserRestControllerTest {
-    @InjectMockKs
-    lateinit var controller: UserRestController
-
-    @MockK
-    lateinit var mockService: UserService
-
+@WebMvcTest(UserRestController::class)
+internal class UserRestControllerTest() {
     @Autowired
     lateinit var mockMvc: MockMvc
 
     @Autowired
     lateinit var objectMapper: ObjectMapper
 
+    @MockBean
+    lateinit var mockService: UserService
+
+    @MockBean
+    lateinit var modelMapper: ModelMapper
+
     lateinit var userForm: UserForm
 
     @BeforeEach
     fun setUp() {
-        userForm = UserForm(userId = "test3", userName = "テストユーザー１", password = "test1pass")
-        MockKAnnotations.init(this, relaxUnitFun = true)
+        userForm = UserForm(userId = "test1", userName = "テストユーザー１", password = "test1pass")
     }
 
     @AfterEach
@@ -62,7 +53,14 @@ internal class UserRestControllerTest {
 
     @Test
     @DisplayName("addNewUser関数はDBに新規ユーザーを1件登録できる")
+
+
     fun addNewUserTest() {
+        // expected
+        val expected = UserEntity("test1", "テストユーザー１", "test1pass")
+
+        doReturn(expected).`when`(mockService).getUserById(anyString())
+
         mockMvc.perform(post("/user/add").flashAttr("userForm", userForm).contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.userId").value("test1"))
@@ -73,19 +71,19 @@ internal class UserRestControllerTest {
     @Test
     @DisplayName("addNewUser関数はuseridが重複する場合、DuplicateUserIdExceptionを発生させる")
     fun addNewUserExceptionTest() {
-        val mockMvcForException =
-            MockMvcBuilders.standaloneSetup(controller).setControllerAdvice(ApiExceptionHandler()).build()
+        // expected
+        val expectedErrorCode = "400 BAD_REQUEST"
+        val expectedErrorMsg = "Duplicate key detected!!"
 
         // 無条件で例外を投げる
-        every { mockService.getUserById(any()) } throws DuplicateIdException()
-        every { mockService.addNewUser(any()) } throws DuplicateIdException()
+        doThrow(DuplicateIdException()).`when`(mockService).getUserById(anyString())
 
-        val response = mockMvcForException.perform(
+        val response = mockMvc.perform(
             post("/user/add").flashAttr("userForm", userForm).contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isBadRequest).andReturn().response.contentAsString
 
         val errorResponse = objectMapper.readValue(response, ExceptionResponse::class.java)
-        assertThat(errorResponse.errorCode).isEqualTo("400 BAD_REQUEST")
-        assertThat(errorResponse.errorMessage).isEqualTo("Duplicate key detected!!")
+        assertThat(errorResponse.errorCode).isEqualTo(expectedErrorCode)
+        assertThat(errorResponse.errorMessage).isEqualTo(expectedErrorMsg)
     }
 }

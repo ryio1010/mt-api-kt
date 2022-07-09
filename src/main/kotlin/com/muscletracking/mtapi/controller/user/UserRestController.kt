@@ -24,9 +24,10 @@ class UserRestController {
     @PostMapping("/add")
     fun addNewUser(@ModelAttribute userForm: UserForm): UserResponse {
         // userId重複チェック
-        userService.getUserById(userForm.userId) ?: run {
+        if (userService.getUserById(userForm.userId) == null) {
             throw DuplicateIdException()
         }
+
         // ユーザー新規登録
         val addUser = UserEntity()
         modelMapper.map(userForm, addUser)
