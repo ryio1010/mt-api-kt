@@ -1,10 +1,11 @@
 package com.muscletracking.mtapi.entity.user
 
 import com.muscletracking.mtapi.entity.BaseColumnEntity
-import org.seasar.doma.*
+import org.seasar.doma.Column
+import org.seasar.doma.Entity
+import org.seasar.doma.Id
+import org.seasar.doma.Table
 import java.time.LocalDateTime
-import java.time.LocalDateTime.now
-import javax.print.attribute.standard.JobOriginatingUserName
 
 @Entity
 @Table(name = "m_user")

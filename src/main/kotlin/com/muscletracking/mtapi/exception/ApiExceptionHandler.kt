@@ -18,4 +18,11 @@ class ApiExceptionHandler : ResponseEntityExceptionHandler() {
         val response = ExceptionResponse(HttpStatus.BAD_REQUEST.toString(), "Duplicate key detected!!")
         return super.handleExceptionInternal(ex, response, HttpHeaders.EMPTY, HttpStatus.BAD_REQUEST, request)
     }
+
+    @ExceptionHandler(NoDataFoundException::class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun handleNoDataFoundException(ex: NoDataFoundException, request: WebRequest): ResponseEntity<Any> {
+        val response = ExceptionResponse(HttpStatus.NOT_FOUND.toString(), "No Data Found!!!")
+        return super.handleExceptionInternal(ex, response, HttpHeaders.EMPTY, HttpStatus.NOT_FOUND, request)
+    }
 }

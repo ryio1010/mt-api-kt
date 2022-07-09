@@ -24,7 +24,7 @@ import javax.sql.DataSource
  * DbSetupを利用したテストを行う
  * DbSetupは原則としてテーブルを全削除・データのインサート・テストの順で実行する
  * 原則としてテスト終了後、データの削除は行わない
- * TestContainersを利用してテストを行う
+ * TestContainersを利用してテスト用DBをセットアップする
  */
 @SpringBootTest
 internal class UserDaoTest : DaoBaseTest() {
@@ -73,12 +73,14 @@ internal class UserDaoTest : DaoBaseTest() {
         val actual = userDao.selectById("test1")
 
         // assertion
-        assertThat(actual).isNotNull()
-        assertThat(actual?.userId).isEqualTo("test1")
-        assertThat(actual?.userName).isEqualTo("テストユーザー")
-        assertThat(actual?.password).isEqualTo("test1")
-        assertThat(actual?.regId).isEqualTo("test1")
-        assertThat(actual?.updId).isEqualTo("test1")
+        actual?.let {
+            assertThat(actual).isNotNull()
+            assertThat(actual.userId).isEqualTo("test1")
+            assertThat(actual.userName).isEqualTo("テストユーザー")
+            assertThat(actual.password).isEqualTo("test1")
+            assertThat(actual.regId).isEqualTo("test1")
+            assertThat(actual.updId).isEqualTo("test1")
+        }
     }
 
     @Test
@@ -101,8 +103,6 @@ internal class UserDaoTest : DaoBaseTest() {
             assertThat(it.regId).isEqualTo("test1")
             assertThat(it.updId).isEqualTo("test1")
         }
-
-
     }
 
     @Test

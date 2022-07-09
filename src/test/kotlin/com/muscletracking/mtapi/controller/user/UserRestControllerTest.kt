@@ -1,21 +1,17 @@
-package com.muscletracking.mtapi.controller
+package com.muscletracking.mtapi.controller.user
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.truth.Truth.assertThat
-import com.muscletracking.mtapi.controller.user.UserRestController
 import com.muscletracking.mtapi.entity.user.UserEntity
 import com.muscletracking.mtapi.entity.user.UserForm
 import com.muscletracking.mtapi.exception.DuplicateIdException
 import com.muscletracking.mtapi.exception.ExceptionResponse
+import com.muscletracking.mtapi.exception.NoDataFoundException
 import com.muscletracking.mtapi.service.user.UserService
-import io.mockk.MockKAnnotations
-import io.mockk.every
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-
 import org.junit.jupiter.api.DisplayName
-import org.mockito.Mockito
+import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
 import org.modelmapper.ModelMapper
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,7 +20,9 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @WebMvcTest(UserRestController::class)
 internal class UserRestControllerTest() {
@@ -52,14 +50,48 @@ internal class UserRestControllerTest() {
     }
 
     @Test
-    @DisplayName("addNewUser関数はDBに新規ユーザーを1件登録できる")
-
-
-    fun addNewUserTest() {
+    @DisplayName("getUserById関数はIDでユーザーを１件取得する")
+    fun getByIdTest() {
         // expected
         val expected = UserEntity("test1", "テストユーザー１", "test1pass")
 
         doReturn(expected).`when`(mockService).getUserById(anyString())
+
+        mockMvc.perform(get("/user/test1").contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.userId").value("test1"))
+            .andExpect(jsonPath("$.userName").value("テストユーザー１"))
+            .andExpect(jsonPath("$.password").value("test1pass"))
+    }
+
+    @Test
+    @DisplayName("getUserById関数はIDに紐づくユーザーが存在しない場合、NoDataFoundExceptionを発生させる")
+    fun getUserByIdNoDataFoundExceptionTest() {
+        val expectedErrorCode = "404 NOT_FOUND"
+        val expectedErrorMsg = "No Data Found!!!"
+
+        // 無条件で例外実行
+        doThrow(NoDataFoundException()).`when`(mockService).getUserById(anyString())
+
+        val response = mockMvc.perform(
+            get("/user/test1").contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isNotFound).andReturn().response.contentAsString
+
+        val errorResponse = objectMapper.readValue(response, ExceptionResponse::class.java)
+        assertThat(errorResponse.errorCode).isEqualTo(expectedErrorCode)
+        assertThat(errorResponse.errorMessage).isEqualTo(expectedErrorMsg)
+    }
+
+    @Test
+    @DisplayName("addNewUser関数はDBに新規ユーザーを1件登録できる")
+    fun addNewUserTest() {
+        // expected
+        val expected = UserEntity("test1", "テストユーザー１", "test1pass")
+
+        doReturn(null)
+            .doReturn(expected)
+            .`when`(mockService)
+            .getUserById(anyString())
 
         mockMvc.perform(post("/user/add").flashAttr("userForm", userForm).contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk)
