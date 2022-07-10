@@ -1,10 +1,7 @@
 package com.muscletracking.mtapi.dao.user
 
 import com.muscletracking.mtapi.entity.user.UserEntity
-import org.seasar.doma.Dao
-import org.seasar.doma.Insert
-import org.seasar.doma.Select
-import org.seasar.doma.Update
+import org.seasar.doma.*
 import org.seasar.doma.boot.ConfigAutowireable
 
 @ConfigAutowireable
@@ -18,4 +15,7 @@ interface UserDao {
 
     @Update
     fun updateUser(updateUser: UserEntity): Int
+
+    @Delete
+    fun deleteUser(deleteUser: UserEntity): Int
 }

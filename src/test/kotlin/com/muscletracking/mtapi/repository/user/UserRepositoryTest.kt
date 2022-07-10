@@ -76,4 +76,17 @@ internal class UserRepositoryTest {
         confirmVerified(userDao)
     }
 
+    @Test
+    @DisplayName("ユーザーを削除できる")
+    fun deleteUserTest() {
+        val arg = UserEntity(userId = "test1", userName = "testUser", password = "test1")
+        every { userDao.deleteUser(any()) } returns 1
+
+        userRepository.deleteUser(arg)
+
+        verify(exactly = 1) { userRepository.deleteUser(any()) }
+
+        confirmVerified(userDao)
+    }
+
 }

@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
@@ -149,7 +150,41 @@ internal class UserRestControllerTest() {
         doThrow(NoDataFoundException()).`when`(mockService).getUserById(anyString())
 
         val response = mockMvc.perform(
-            get("/user/update").flashAttr("userForm", userForm).contentType(MediaType.APPLICATION_JSON)
+            put("/user/update").flashAttr("userForm", userForm).contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isNotFound).andReturn().response.contentAsString
+
+        val errorResponse = objectMapper.readValue(response, ExceptionResponse::class.java)
+        assertThat(errorResponse.errorCode).isEqualTo(expectedErrorCode)
+        assertThat(errorResponse.errorMessage).isEqualTo(expectedErrorMsg)
+    }
+
+    @Test
+    @DisplayName("deleteUser関数はユーザーを削除できる")
+    fun deleteUserTest() {
+        // expected
+        val beforeDelete = UserEntity("test1", "テストユーザー１", "beforeUpdate")
+        val expected = null
+
+        doReturn(beforeDelete)
+            .doReturn(expected)
+            .`when`(mockService)
+            .getUserById(anyString())
+
+        mockMvc.perform(delete("/user/test1").contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk)
+    }
+
+    @Test
+    @DisplayName("deleteUser関数は削除対象ユーザーが存在しない場合、NoDataFoundExceptionを発生させる")
+    fun deleteUserNoDataFoundExceptionTest() {
+        val expectedErrorCode = "404 NOT_FOUND"
+        val expectedErrorMsg = "No Data Found!!!"
+
+        // 無条件で例外実行
+        doThrow(NoDataFoundException()).`when`(mockService).getUserById(anyString())
+
+        val response = mockMvc.perform(
+            delete("/user/test1").contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isNotFound).andReturn().response.contentAsString
 
         val errorResponse = objectMapper.readValue(response, ExceptionResponse::class.java)

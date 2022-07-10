@@ -22,4 +22,8 @@ class UserRepository {
     fun updateUser(updateInfo: UserEntity): Int {
         return userDao.updateUser(updateInfo)
     }
+
+    fun deleteUser(deleteUser: UserEntity): Int {
+        return userDao.deleteUser(deleteUser)
+    }
 }

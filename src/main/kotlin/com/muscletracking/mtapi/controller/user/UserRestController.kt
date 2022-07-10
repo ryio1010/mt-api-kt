@@ -55,10 +55,7 @@ class UserRestController {
 
     @PutMapping("/update")
     fun updateUserInfo(@ModelAttribute userForm: UserForm): ResponseEntity<UserResponse> {
-        val target = userService.getUserById(userForm.userId)
-        if (target == null) {
-            NoDataFoundException()
-        }
+        val target = userService.getUserById(userForm.userId) ?: throw NoDataFoundException()
 
         // update
         target?.let {
@@ -73,5 +70,17 @@ class UserRestController {
         val response = UserResponse(updated.userId, updated.userName, updated.password)
 
         return ResponseEntity<UserResponse>(response, HttpStatus.OK)
+    }
+
+    @DeleteMapping("/{userId}")
+    fun deleteUser(@PathVariable userId: String): ResponseEntity<Boolean> {
+        val target = userService.getUserById(userId) ?: throw NoDataFoundException()
+        userService.deleteUser(target)
+
+        val deleted = userService.getUserById(userId)
+        if (deleted != null) {
+            throw Exception()
+        }
+        return ResponseEntity<Boolean>(true, HttpStatus.OK)
     }
 }

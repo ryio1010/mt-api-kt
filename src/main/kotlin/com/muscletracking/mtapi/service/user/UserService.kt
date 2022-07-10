@@ -22,4 +22,8 @@ class UserService {
     fun updateUser(updateInfo: UserEntity): Int {
         return userRepository.updateUser(updateInfo)
     }
+
+    fun deleteUser(deleteUser: UserEntity): Int {
+        return userRepository.deleteUser(deleteUser)
+    }
 }

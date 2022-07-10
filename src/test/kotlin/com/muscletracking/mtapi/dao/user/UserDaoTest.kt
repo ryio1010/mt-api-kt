@@ -109,7 +109,7 @@ internal class UserDaoTest : DaoBaseTest() {
     @DisplayName("ユーザー情報を更新できる")
     fun updateUserTest() {
         // db test data setup
-        val insertTestUser = insertInto("m_user") {
+        val updateTestUser = insertInto("m_user") {
             withDefaultValue("regdate", LocalDateTime.now())
             withDefaultValue("upddate", LocalDateTime.now())
             withDefaultValue("version", 1)
@@ -117,7 +117,7 @@ internal class UserDaoTest : DaoBaseTest() {
             values("test1", "テストユーザー", "test1", "test1", "test1")
         }
 
-        val operation = sequenceOf(deleteAllUserTable, insertTestUser)
+        val operation = sequenceOf(deleteAllUserTable, updateTestUser)
         DbSetup(destination, operation).launch()
 
         val updateUser =
@@ -134,5 +134,26 @@ internal class UserDaoTest : DaoBaseTest() {
             assertThat(it.regId).isEqualTo("test1")
             assertThat(it.updId).isEqualTo("test1")
         }
+    }
+
+    @Test
+    @DisplayName("ユーザーを削除できる")
+    fun deleteUserTest() {
+        // db test data setup
+        val deleteTestUser = insertInto("m_user") {
+            withDefaultValue("regdate", LocalDateTime.now())
+            withDefaultValue("upddate", LocalDateTime.now())
+            withDefaultValue("version", 1)
+            columns("userid", "username", "password", "regid", "updid")
+            values("test1", "テストユーザー", "test1", "test1", "test1")
+        }
+        val operation = sequenceOf(deleteAllUserTable, deleteTestUser)
+        DbSetup(destination, operation).launch()
+
+        val deleteUser = UserEntity("test1", "テストユーザー", "test1")
+        userDao.deleteUser(deleteUser)
+
+        val actual = userDao.selectById("test1")
+        assertThat(actual).isNull()
     }
 }
