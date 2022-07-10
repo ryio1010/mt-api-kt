@@ -24,7 +24,7 @@ import javax.sql.DataSource
  * DbSetupを利用したテストを行う
  * DbSetupは原則としてテーブルを全削除・データのインサート・テストの順で実行する
  * 原則としてテスト終了後、データの削除は行わない
- * TestContainersを利用してテストを行う
+ * TestContainersを利用してテスト用DBをセットアップする
  */
 @SpringBootTest
 internal class UserDaoTest : DaoBaseTest() {
@@ -73,12 +73,14 @@ internal class UserDaoTest : DaoBaseTest() {
         val actual = userDao.selectById("test1")
 
         // assertion
-        assertThat(actual).isNotNull()
-        assertThat(actual?.userId).isEqualTo("test1")
-        assertThat(actual?.userName).isEqualTo("テストユーザー")
-        assertThat(actual?.password).isEqualTo("test1")
-        assertThat(actual?.regId).isEqualTo("test1")
-        assertThat(actual?.updId).isEqualTo("test1")
+        actual?.let {
+            assertThat(actual).isNotNull()
+            assertThat(actual.userId).isEqualTo("test1")
+            assertThat(actual.userName).isEqualTo("テストユーザー")
+            assertThat(actual.password).isEqualTo("test1")
+            assertThat(actual.regId).isEqualTo("test1")
+            assertThat(actual.updId).isEqualTo("test1")
+        }
     }
 
     @Test
@@ -101,15 +103,13 @@ internal class UserDaoTest : DaoBaseTest() {
             assertThat(it.regId).isEqualTo("test1")
             assertThat(it.updId).isEqualTo("test1")
         }
-
-
     }
 
     @Test
     @DisplayName("ユーザー情報を更新できる")
     fun updateUserTest() {
         // db test data setup
-        val insertTestUser = insertInto("m_user") {
+        val updateTestUser = insertInto("m_user") {
             withDefaultValue("regdate", LocalDateTime.now())
             withDefaultValue("upddate", LocalDateTime.now())
             withDefaultValue("version", 1)
@@ -117,7 +117,7 @@ internal class UserDaoTest : DaoBaseTest() {
             values("test1", "テストユーザー", "test1", "test1", "test1")
         }
 
-        val operation = sequenceOf(deleteAllUserTable, insertTestUser)
+        val operation = sequenceOf(deleteAllUserTable, updateTestUser)
         DbSetup(destination, operation).launch()
 
         val updateUser =
@@ -134,5 +134,26 @@ internal class UserDaoTest : DaoBaseTest() {
             assertThat(it.regId).isEqualTo("test1")
             assertThat(it.updId).isEqualTo("test1")
         }
+    }
+
+    @Test
+    @DisplayName("ユーザーを削除できる")
+    fun deleteUserTest() {
+        // db test data setup
+        val deleteTestUser = insertInto("m_user") {
+            withDefaultValue("regdate", LocalDateTime.now())
+            withDefaultValue("upddate", LocalDateTime.now())
+            withDefaultValue("version", 1)
+            columns("userid", "username", "password", "regid", "updid")
+            values("test1", "テストユーザー", "test1", "test1", "test1")
+        }
+        val operation = sequenceOf(deleteAllUserTable, deleteTestUser)
+        DbSetup(destination, operation).launch()
+
+        val deleteUser = UserEntity("test1", "テストユーザー", "test1")
+        userDao.deleteUser(deleteUser)
+
+        val actual = userDao.selectById("test1")
+        assertThat(actual).isNull()
     }
 }

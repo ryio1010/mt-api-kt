@@ -4,10 +4,12 @@ import com.google.common.truth.Truth
 import com.muscletracking.mtapi.entity.user.UserEntity
 import com.muscletracking.mtapi.repository.user.UserRepository
 import com.muscletracking.mtapi.service.user.UserService
-import io.mockk.*
+import io.mockk.MockKAnnotations
+import io.mockk.confirmVerified
+import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
-import org.amshove.kluent.`should be equal to`
+import io.mockk.verify
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -56,13 +58,43 @@ internal class UserServiceTest {
     @DisplayName("新規ユーザーを1件登録できる")
     fun addNewUserTest() {
         // expected
-        val expected = UserEntity(userId = "ryio1010", userName = "ryo", password = "ryio1010")
+        val arg = UserEntity(userId = "ryio1010", userName = "ryo", password = "ryio1010")
         every { userRepository.addNewUser(any()) } returns 1
 
         // actual
-        userService.addNewUser(expected)
+        userService.addNewUser(arg)
 
         verify(exactly = 1) { userRepository.addNewUser(any()) }
+
+        confirmVerified(userRepository)
+    }
+
+    @Test
+    @DisplayName("ユーザー情報を１件更新できる")
+    fun updateUserTest() {
+        // expected
+        val arg = UserEntity(userId = "ryio1010", userName = "ryo", password = "ryio1010")
+        every { userRepository.updateUser(any()) } returns 1
+
+        // actual
+        userService.updateUser(arg)
+
+        verify(exactly = 1) { userRepository.updateUser(any()) }
+
+        confirmVerified(userRepository)
+    }
+
+    @Test
+    @DisplayName("ユーザーを削除できる")
+    fun deleteUserTest() {
+        // expected
+        val arg = UserEntity(userId = "ryio1010", userName = "ryo", password = "ryio1010")
+        every { userRepository.deleteUser(any()) } returns 1
+
+        // actual
+        userService.deleteUser(arg)
+
+        verify(exactly = 1) { userRepository.deleteUser(any()) }
 
         confirmVerified(userRepository)
     }
