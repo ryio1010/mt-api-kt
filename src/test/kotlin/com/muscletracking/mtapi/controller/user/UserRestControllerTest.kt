@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.truth.Truth.assertThat
 import com.muscletracking.mtapi.entity.user.UserEntity
 import com.muscletracking.mtapi.entity.user.UserForm
-import com.muscletracking.mtapi.exception.DuplicateIdException
+import com.muscletracking.mtapi.exception.exception.DuplicateIdException
 import com.muscletracking.mtapi.exception.ExceptionResponse
-import com.muscletracking.mtapi.exception.NoDataFoundException
+import com.muscletracking.mtapi.exception.exception.NoDataFoundException
 import com.muscletracking.mtapi.service.user.UserService
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach

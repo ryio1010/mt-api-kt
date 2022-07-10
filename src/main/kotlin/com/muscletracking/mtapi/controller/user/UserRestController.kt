@@ -3,8 +3,8 @@ package com.muscletracking.mtapi.controller.user
 import com.muscletracking.mtapi.entity.user.UserEntity
 import com.muscletracking.mtapi.entity.user.UserForm
 import com.muscletracking.mtapi.entity.user.UserResponse
-import com.muscletracking.mtapi.exception.DuplicateIdException
-import com.muscletracking.mtapi.exception.NoDataFoundException
+import com.muscletracking.mtapi.exception.exception.DuplicateIdException
+import com.muscletracking.mtapi.exception.exception.NoDataFoundException
 import com.muscletracking.mtapi.service.user.UserService
 import org.modelmapper.ModelMapper
 import org.springframework.beans.factory.annotation.Autowired
