@@ -58,13 +58,28 @@ internal class UserServiceTest {
     @DisplayName("新規ユーザーを1件登録できる")
     fun addNewUserTest() {
         // expected
-        val expected = UserEntity(userId = "ryio1010", userName = "ryo", password = "ryio1010")
+        val arg = UserEntity(userId = "ryio1010", userName = "ryo", password = "ryio1010")
         every { userRepository.addNewUser(any()) } returns 1
 
         // actual
-        userService.addNewUser(expected)
+        userService.addNewUser(arg)
 
         verify(exactly = 1) { userRepository.addNewUser(any()) }
+
+        confirmVerified(userRepository)
+    }
+
+    @Test
+    @DisplayName("ユーザー情報を１件更新できる")
+    fun updateUserTest() {
+        // expected
+        val arg = UserEntity(userId = "ryio1010", userName = "ryo", password = "ryio1010")
+        every { userRepository.updateUser(any()) } returns 1
+
+        // actual
+        userService.updateUser(arg)
+
+        verify(exactly = 1) { userRepository.updateUser(any()) }
 
         confirmVerified(userRepository)
     }

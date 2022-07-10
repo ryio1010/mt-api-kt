@@ -52,4 +52,26 @@ class UserRestController {
         // response作成
         return ResponseEntity<UserResponse>(response, HttpStatus.OK)
     }
+
+    @PutMapping("/update")
+    fun updateUserInfo(@ModelAttribute userForm: UserForm): ResponseEntity<UserResponse> {
+        val target = userService.getUserById(userForm.userId)
+        if (target == null) {
+            NoDataFoundException()
+        }
+
+        // update
+        target?.let {
+            it.userId = userForm.userId
+            it.userName = userForm.userName
+            it.password = userForm.password
+
+            userService.updateUser(it)
+        }
+
+        val updated = userService.getUserById(userForm.userId) ?: throw NoDataFoundException()
+        val response = UserResponse(updated.userId, updated.userName, updated.password)
+
+        return ResponseEntity<UserResponse>(response, HttpStatus.OK)
+    }
 }

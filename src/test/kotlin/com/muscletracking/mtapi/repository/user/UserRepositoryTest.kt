@@ -33,7 +33,7 @@ internal class UserRepositoryTest {
 
     @Test
     @DisplayName("ID検索でユーザー情報を1件取得できる")
-    fun getUserById() {
+    fun getUserByIdTest() {
         val expected = UserEntity(userId = "ryio1010", userName = "ryo", password = "ryio1010")
 
         every { userDao.selectById(any()) } returns expected
@@ -52,14 +52,28 @@ internal class UserRepositoryTest {
 
     @Test
     @DisplayName("新規ユーザーを1件登録できる")
-    fun addNewUser() {
-        val expected = UserEntity(userId = "test1", userName = "testUser", password = "test1")
+    fun addNewUserTest() {
+        val arg = UserEntity(userId = "test1", userName = "testUser", password = "test1")
         every { userDao.insertNewUser(any()) } returns 1
 
-        userRepository.addNewUser(expected)
+        userRepository.addNewUser(arg)
 
         verify(exactly = 1) { userRepository.addNewUser(any()) }
 
         confirmVerified(userDao)
     }
+
+    @Test
+    @DisplayName("ユーザー情報を１件更新できる")
+    fun updateUserTest() {
+        val arg = UserEntity(userId = "test1", userName = "testUser", password = "test1")
+        every { userDao.updateUser(any()) } returns 1
+
+        userRepository.updateUser(arg)
+
+        verify(exactly = 1) { userRepository.updateUser(any()) }
+
+        confirmVerified(userDao)
+    }
+
 }

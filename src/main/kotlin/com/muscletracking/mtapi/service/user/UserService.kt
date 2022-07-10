@@ -18,4 +18,8 @@ class UserService {
     fun addNewUser(newUser: UserEntity): Int {
         return userRepository.addNewUser(newUser)
     }
+
+    fun updateUser(updateInfo: UserEntity): Int {
+        return userRepository.updateUser(updateInfo)
+    }
 }

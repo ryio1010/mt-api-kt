@@ -18,4 +18,8 @@ class UserRepository {
     fun addNewUser(newUser: UserEntity): Int {
         return userDao.insertNewUser(newUser)
     }
+
+    fun updateUser(updateInfo: UserEntity): Int {
+        return userDao.updateUser(updateInfo)
+    }
 }
