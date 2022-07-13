@@ -1,5 +1,7 @@
 package com.muscletracking.mtapi.exception
 
+import com.muscletracking.mtapi.exception.exception.DuplicateIdException
+import com.muscletracking.mtapi.exception.exception.NoDataFoundException
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
